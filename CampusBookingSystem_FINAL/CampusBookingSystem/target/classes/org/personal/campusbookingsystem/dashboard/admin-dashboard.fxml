@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.personal.campusbookingsystem.controller.AdminDashboardController"
+            stylesheets="@../css/style.css">
+
+    <!-- ================= LEFT SIDEBAR (spans full window height) ================= -->
+
+    <left>
+        <VBox spacing="12" prefWidth="230" styleClass="sidebar">
+            <padding><Insets top="30" left="20" right="20" bottom="20"/></padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <children>
+                    <StackPane styleClass="nav-logo-badge">
+                        <children>
+                            <ImageView fitWidth="20" fitHeight="23" preserveRatio="true" smooth="true">
+                                <image>
+                                    <Image url="@../images/logo.png"/>
+                                </image>
+                            </ImageView>
+                        </children>
+                    </StackPane>
+                    <Label text="UniReserve" styleClass="logo-title"/>
+                </children>
+            </HBox>
+            <Region prefHeight="10"/>
+
+            <Button text="Dashboard" maxWidth="Infinity"
+                    contentDisplay="LEFT" graphicTextGap="10"
+                    styleClass="sidebar-button-selected">
+                <graphic>
+                    <FontIcon iconLiteral="fas-th-large" iconSize="16" styleClass="nav-icon"/>
+                </graphic>
+            </Button>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Button text="Logout" maxWidth="Infinity"
+                    contentDisplay="LEFT" graphicTextGap="10"
+                    styleClass="sidebar-button" onAction="#handleLogout">
+                <graphic>
+                    <FontIcon iconLiteral="fas-sign-out-alt" iconSize="16" styleClass="nav-icon"/>
+                </graphic>
+            </Button>
+        </VBox>
+    </left>
+
+    <!-- ============ RIGHT SIDE: header bar on top + scrollable content below ============ -->
+    <!-- Nested inside its own BorderPane so the header only sits next to the      -->
+    <!-- sidebar (not above it) - that's what lets the sidebar reach the very top. -->
+
+    <center>
+
+        <BorderPane>
+
+            <top>
+                <HBox alignment="CENTER_LEFT" spacing="15" styleClass="topbar">
+                    <padding><Insets top="18" right="35" bottom="18" left="35"/></padding>
+                    <Label text="Campus Booking System" styleClass="page-header-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label fx:id="topBarAdminAvatarLabel" text="A" styleClass="avatar"/>
+                        <VBox spacing="3" alignment="CENTER_LEFT">
+                            <Label fx:id="topBarAdminLabel" text="Admin" styleClass="profile-name"/>
+                            <Label fx:id="topBarAdminRoleLabel" text="ADMIN" styleClass="role-badge"/>
+                        </VBox>
+                    </HBox>
+                </HBox>
+            </top>
+
+            <center>
+                <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" styleClass="main-scroll">
+                    <content>
+                        <VBox spacing="25" styleClass="content-area" maxWidth="Infinity">
+                            <padding><Insets top="25" left="35" right="35" bottom="35"/></padding>
+
+                            <!-- Statistics - populated AND sized dynamically by the controller so   -->
+                            <!-- they always stretch to fill the full row width, no gap on the right. -->
+                            <FlowPane hgap="20" vgap="20" maxWidth="Infinity">
+                                <VBox fx:id="statCard1" styleClass="stat-card">
+                                    <Label text="TOTAL RESOURCES" styleClass="stat-title"/>
+                                    <Label fx:id="totalResourcesLabel" text="0" styleClass="stat-number"/>
+                                </VBox>
+                                <VBox fx:id="statCard2" styleClass="stat-card">
+                                    <Label text="PENDING BOOKINGS" styleClass="stat-title"/>
+                                    <Label fx:id="pendingBookingsLabel" text="0" styleClass="stat-number"/>
+                                </VBox>
+                                <VBox fx:id="statCard3" styleClass="stat-card">
+                                    <Label text="REGISTERED USERS" styleClass="stat-title"/>
+                                    <Label fx:id="registeredUsersLabel" text="0" styleClass="stat-number"/>
+                                </VBox>
+                                <VBox fx:id="statCard4" styleClass="stat-card">
+                                    <Label text="AVAILABLE RESOURCES" styleClass="stat-title"/>
+                                    <Label fx:id="availableResourcesLabel" text="0" styleClass="stat-number"/>
+                                </VBox>
+                            </FlowPane>
+
+                            <!-- Pending Booking Requests -->
+                            <VBox spacing="10" styleClass="search-panel" maxWidth="Infinity">
+                                <HBox alignment="CENTER_LEFT">
+                                    <Label text="Pending Booking Requests" styleClass="page-title" style="-fx-font-size:18;"/>
+                                </HBox>
+                                <TableView fx:id="pendingBookingsTable" prefHeight="260" maxWidth="Infinity">
+                                    <columns>
+                                        <TableColumn fx:id="colStudentName" text="Student" prefWidth="150"/>
+                                        <TableColumn fx:id="colBookingResourceAdmin" text="Resource" prefWidth="170"/>
+                                        <TableColumn fx:id="colBookingDateAdmin" text="Date" prefWidth="110"/>
+                                        <TableColumn fx:id="colBookingTimeAdmin" text="Time" prefWidth="130"/>
+                                        <TableColumn fx:id="colBookingActionsAdmin" text="Actions" prefWidth="200"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+
+                            <!-- Resource Management -->
+                            <VBox spacing="10" styleClass="search-panel" maxWidth="Infinity">
+                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                    <Label text="Resource Management" styleClass="page-title" style="-fx-font-size:18;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="+ Add Resource" styleClass="login-button" onAction="#handleAddResource"/>
+                                </HBox>
+                                <TableView fx:id="resourceTable" prefHeight="280" maxWidth="Infinity">
+                                    <columns>
+                                        <TableColumn fx:id="colResId" text="ID" prefWidth="70"/>
+                                        <TableColumn fx:id="colResName" text="Resource Name" prefWidth="200"/>
+                                        <TableColumn fx:id="colResType" text="Type" prefWidth="130"/>
+                                        <TableColumn fx:id="colResCapacity" text="Capacity" prefWidth="80"/>
+                                        <TableColumn fx:id="colResStatus" text="Status" prefWidth="110"/>
+                                        <TableColumn fx:id="colResActions" text="Actions" prefWidth="160"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </center>
+
+        </BorderPane>
+
+    </center>
+
+</BorderPane>

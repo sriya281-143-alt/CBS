@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.personal.campusbookingsystem.controller.ResourcesController"
+            stylesheets="@../css/style.css">
+
+    <!-- ================= LEFT SIDEBAR (spans full window height) ================= -->
+    <!-- Just navigation + logout now - the user's name/role moved to the top bar.   -->
+
+    <left>
+
+        <VBox spacing="12" prefWidth="230" styleClass="sidebar">
+
+            <padding>
+                <Insets top="30" left="20" right="20" bottom="20"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <children>
+                    <StackPane styleClass="nav-logo-badge">
+                        <children>
+                            <ImageView fitWidth="20" fitHeight="23" preserveRatio="true" smooth="true">
+                                <image>
+                                    <Image url="@../images/logo.png"/>
+                                </image>
+                            </ImageView>
+                        </children>
+                    </StackPane>
+                    <Label text="UniReserve" styleClass="logo-title"/>
+                </children>
+            </HBox>
+
+            <Region prefHeight="10"/>
+
+            <Button fx:id="dashboardButton" text="Dashboard" maxWidth="Infinity"
+                    contentDisplay="LEFT" graphicTextGap="10"
+                    styleClass="sidebar-button-selected" onAction="#showResourcesView">
+                <graphic>
+                    <FontIcon iconLiteral="fas-th-large" iconSize="16" styleClass="nav-icon"/>
+                </graphic>
+            </Button>
+
+            <Button fx:id="myBookingsButton" text="My Bookings" maxWidth="Infinity"
+                    contentDisplay="LEFT" graphicTextGap="10"
+                    styleClass="sidebar-button" onAction="#showMyBookingsView">
+                <graphic>
+                    <FontIcon iconLiteral="fas-calendar-check" iconSize="16" styleClass="nav-icon"/>
+                </graphic>
+            </Button>
+
+            <Button fx:id="profileButton" text="Profile" maxWidth="Infinity"
+                    contentDisplay="LEFT" graphicTextGap="10"
+                    styleClass="sidebar-button" onAction="#showProfile">
+                <graphic>
+                    <FontIcon iconLiteral="fas-user" iconSize="16" styleClass="nav-icon"/>
+                </graphic>
+            </Button>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Button fx:id="logoutButton" text="Logout" maxWidth="Infinity"
+                    contentDisplay="LEFT" graphicTextGap="10"
+                    styleClass="sidebar-button" onAction="#handleLogout">
+                <graphic>
+                    <FontIcon iconLiteral="fas-sign-out-alt" iconSize="16" styleClass="nav-icon"/>
+                </graphic>
+            </Button>
+
+        </VBox>
+
+    </left>
+
+    <!-- ============ RIGHT SIDE: header bar on top + scrollable content below ============ -->
+    <!-- Nested inside its own BorderPane so the header only sits next to the      -->
+    <!-- sidebar (not above it) - that's what lets the sidebar reach the very top. -->
+
+    <center>
+
+        <BorderPane>
+
+            <top>
+
+                <HBox alignment="CENTER_LEFT" spacing="15" styleClass="topbar">
+
+                    <padding>
+                        <Insets top="18" right="35" bottom="18" left="35"/>
+                    </padding>
+
+                    <Label text="Campus Resource &amp; Space Booking" styleClass="page-header-title"/>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <!-- User profile badge: avatar circle + name on top, role tag underneath -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label fx:id="topBarAvatarLabel" text="U" styleClass="avatar"/>
+                        <VBox spacing="3" alignment="CENTER_LEFT">
+                            <Label fx:id="topBarUserLabel" text="User" styleClass="profile-name"/>
+                            <Label fx:id="topBarRoleLabel" text="ROLE" styleClass="role-badge"/>
+                        </VBox>
+                    </HBox>
+
+                </HBox>
+
+            </top>
+
+            <center>
+
+                <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" styleClass="main-scroll">
+
+                    <content>
+
+                        <StackPane>
+
+                            <!-- ============ RESOURCES VIEW ============ -->
+
+                            <VBox fx:id="resourcesView" spacing="25" styleClass="content-area" maxWidth="Infinity">
+
+                                <padding>
+                                    <Insets top="25" left="35" right="35" bottom="35"/>
+                                </padding>
+
+                                <!-- Statistics -->
+
+                                <FlowPane hgap="20" vgap="20" maxWidth="Infinity">
+
+                                    <VBox styleClass="stat-card">
+                                        <Label text="AVAILABLE RESOURCES" styleClass="stat-title"/>
+                                        <Label fx:id="availableCountLabel" text="0" styleClass="stat-number"/>
+                                    </VBox>
+
+                                    <VBox styleClass="stat-card">
+                                        <Label text="MY ACTIVE BOOKINGS" styleClass="stat-title"/>
+                                        <Label fx:id="activeBookingsLabel" text="0" styleClass="stat-number"/>
+                                    </VBox>
+
+                                    <VBox styleClass="stat-card">
+                                        <Label text="PENDING REQUESTS" styleClass="stat-title"/>
+                                        <Label fx:id="pendingRequestsLabel" text="0" styleClass="stat-number"/>
+                                    </VBox>
+
+                                </FlowPane>
+
+                                <!-- Search -->
+
+                                <VBox spacing="15" styleClass="search-panel" maxWidth="Infinity">
+
+                                    <TextField fx:id="searchField" promptText="Search resources by name..."
+                                               styleClass="search-box" onAction="#handleSearch"/>
+
+                                    <HBox spacing="12" alignment="CENTER_LEFT">
+
+                                        <Label text="Filters:"/>
+
+                                        <ComboBox fx:id="typeFilterCombo" promptText="Type"/>
+
+                                        <ComboBox fx:id="statusFilterCombo" promptText="Status"/>
+
+                                        <Button text="Search" onAction="#handleSearch"/>
+
+                                        <Button text="Reset" onAction="#handleResetFilters"/>
+
+                                    </HBox>
+
+                                </VBox>
+
+                                <!-- Resource Cards - populated AND sized dynamically by the controller so     -->
+                                <!-- they always stretch to fill the full row width, with no gap on the right. -->
+
+                                <FlowPane fx:id="resourceCardsPane" hgap="25" vgap="25" maxWidth="Infinity"/>
+
+                            </VBox>
+
+                            <!-- ============ MY BOOKINGS VIEW ============ -->
+
+                            <VBox fx:id="myBookingsView" spacing="20" styleClass="content-area" maxWidth="Infinity"
+                                  visible="false" managed="false">
+
+                                <padding>
+                                    <Insets top="25" left="35" right="35" bottom="35"/>
+                                </padding>
+
+                                <Label text="My Bookings" styleClass="page-title"/>
+
+                                <TableView fx:id="myBookingsTable" prefHeight="480" maxWidth="Infinity">
+                                    <columns>
+                                        <TableColumn fx:id="colBookingResource" text="Resource" prefWidth="220"/>
+                                        <TableColumn fx:id="colBookingDate" text="Date" prefWidth="120"/>
+                                        <TableColumn fx:id="colBookingTime" text="Time" prefWidth="140"/>
+                                        <TableColumn fx:id="colBookingPurpose" text="Purpose" prefWidth="220"/>
+                                        <TableColumn fx:id="colBookingStatus" text="Status" prefWidth="120"/>
+                                        <TableColumn fx:id="colBookingAction" text="Action" prefWidth="120"/>
+                                    </columns>
+                                </TableView>
+
+                            </VBox>
+
+                            <!-- ============ PROFILE VIEW ============ -->
+
+                            <VBox fx:id="profileView" spacing="20" styleClass="content-area" maxWidth="Infinity"
+                                  visible="false" managed="false">
+
+                                <padding>
+                                    <Insets top="25" left="35" right="35" bottom="35"/>
+                                </padding>
+
+                                <Label text="Profile" styleClass="page-title"/>
+
+                                <VBox spacing="14" styleClass="stat-card" maxWidth="420">
+                                    <Label fx:id="profileAvatarLabel" text="U" styleClass="avatar"/>
+                                    <Label fx:id="profileNameLabel" text="Name" styleClass="resource-title"/>
+                                    <Label fx:id="profileRoleLabel" text="Role: -"/>
+                                    <Label fx:id="profileUserIdLabel" text="User ID: -"/>
+                                    <Label fx:id="profileEmailLabel" text="Email: -"/>
+                                </VBox>
+
+                            </VBox>
+
+                        </StackPane>
+
+                    </content>
+
+                </ScrollPane>
+
+            </center>
+
+        </BorderPane>
+
+    </center>
+
+</BorderPane>

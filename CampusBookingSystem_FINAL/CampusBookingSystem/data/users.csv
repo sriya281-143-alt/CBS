@@ -1,0 +1,5 @@
+userId,name,email,password,role
+U001,Aisha Shakya,aisha@student.edu,student123,STUDENT
+U002,James Olen,james@student.edu,student123,STUDENT
+U003,Rahul Patel,rahul@staff.edu,staff123,STAFF
+U004,Safir Gautam,safir@admin.edu,admin123,ADMIN

@@ -1,0 +1,8 @@
+resourceId,name,resourceType,capacity,status
+R001,Study Room A101,Study Room,8,AVAILABLE
+R002,Computer Lab,Lab Equipment,30,AVAILABLE
+R003,Single Study Room,Study Room,1,LIMITED
+R004,Seminar Room 101,Event Space,25,MAINTENANCE
+R005,Innovation Hub,Event Space,40,AVAILABLE
+R006,Research Lab,Lab Equipment,16,OCCUPIED
+R007,Portable Projector #1,Lab Equipment,1,AVAILABLE

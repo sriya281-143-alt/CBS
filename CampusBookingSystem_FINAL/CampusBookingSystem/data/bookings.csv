@@ -1,0 +1,2 @@
+bookingId,userId,creatorName,resourceId,bookingDate,startTime,endTime,purpose,status
+BK0001,U001,Aisha Shakya,R001,2026-07-26,08:00,09:00,revision,PENDING

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.personal.campusbookingsystem.controller.BookingController"
+            prefWidth="640" prefHeight="560"
+            styleClass="dialog-pane"
+            stylesheets="@../css/style.css">
+
+    <top>
+        <VBox spacing="4">
+            <padding><Insets top="25" left="30" right="30" bottom="10"/></padding>
+            <Label text="New Booking" styleClass="title" style="-fx-font-size:22;"/>
+            <Label text="Complete the form below to reserve your space." styleClass="subtitle"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="14">
+
+            <padding><Insets top="10" left="30" right="30" bottom="10"/></padding>
+
+            <VBox spacing="4" styleClass="stat-card">
+                <Label fx:id="resourceNameLabel" text="Resource Name" styleClass="resource-title"/>
+                <Label fx:id="resourceTypeLabel" text="Type: -"/>
+                <Label fx:id="resourceCapacityLabel" text="Capacity: -"/>
+            </VBox>
+
+            <Label text="Booking Date *" styleClass="form-label"/>
+            <DatePicker fx:id="bookingDatePicker" maxWidth="Infinity"/>
+
+            <HBox spacing="20">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Start Time *" styleClass="form-label"/>
+                    <ComboBox fx:id="startTimeCombo" maxWidth="Infinity"/>
+                </VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="End Time *" styleClass="form-label"/>
+                    <ComboBox fx:id="endTimeCombo" maxWidth="Infinity"/>
+                </VBox>
+            </HBox>
+
+            <Label text="Purpose of Booking *" styleClass="form-label"/>
+            <TextField fx:id="purposeField" promptText="e.g. Group study session for CS3001 exam revision"/>
+
+            <Label text="Additional Notes (optional)" styleClass="form-label"/>
+            <TextArea fx:id="notesArea" prefRowCount="3" wrapText="true"
+                      promptText="Any special requirements, accessibility needs, or additional information..."/>
+
+            <Label text="Booking Rules: max 3 hours per booking · no double booking allowed · student bookings require approval"
+                   wrapText="true" styleClass="bottom-text"/>
+
+            <Label fx:id="bookingErrorLabel" text="" managed="false" visible="false" styleClass="error-text" wrapText="true"/>
+
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="12" alignment="CENTER_RIGHT">
+            <padding><Insets top="10" left="30" right="30" bottom="25"/></padding>
+            <Button text="Cancel" onAction="#handleCancel"/>
+            <Button text="Confirm Booking" styleClass="login-button" onAction="#handleConfirmBooking"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
